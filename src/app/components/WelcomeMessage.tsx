@@ -1,4 +1,4 @@
-import { Visitor } from "@/types/VistorTypes";
+import { Visitor } from "@/types/visitorTypes";
 
 export default function WelcomeMessage({ visitor }: { visitor: Visitor }) {
   return (
