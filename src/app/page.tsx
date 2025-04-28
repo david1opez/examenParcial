@@ -3,17 +3,13 @@ import React, { useState } from "react";
 import WelcomeMessage from "../components/WelcomeMessage";
 import VisitorForm from "../components/VisitorForm";
 import "../app/globals.css";
+import { Visitor } from "@/types/visitorTypes";
 
 export default function VisitorRegistration() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [visitor, setVisitor] = useState<{
-    username: string;
-    password: string;
-    fullName: string;
-    ticketNumber: string;
-  } | null>(null);
+  const [visitor, setVisitor] = useState<Visitor | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
