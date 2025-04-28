@@ -1,27 +1,37 @@
 'use client'
-import { useState, FormEvent } from "react";
-import { validateVisitor } from "../utils/visitorValidation";
+import React, { useState } from "react";
 import WelcomeMessage from "../components/WelcomeMessage";
 import VisitorForm from "../components/VisitorForm";
 import "../app/globals.css";
-import { Visitor } from "@/types/visitorTypes";
 
 export default function VisitorRegistration() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [visitor, setVisitor] = useState<Visitor | null>(null);
+  const [visitor, setVisitor] = useState<{
+    username: string;
+    password: string;
+    fullName: string;
+    ticketNumber: string;
+  } | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = validateVisitor(username, password);
-    if (result.success) {
-      if (result.data) {
-        setVisitor(result.data);
+    try {
+      const response = await fetch(
+        `/api?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setVisitor(data);
+        setError("");
+      } else {
+        const errorMessage = await response.text();
+        setError(errorMessage);
       }
-      setError("");
-    } else {
-      setError(result.message || "");
+    } catch {
+      setError("Error connecting to the server. Please try again later.");
     }
   };
 
